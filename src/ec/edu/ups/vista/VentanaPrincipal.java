@@ -5,17 +5,27 @@
  */
 package ec.edu.ups.vista;
 
-/**
- *
- * @author Anahi
- */
-public class VentanaPrincipal extends javax.swing.JFrame {
+import ec.edu.ups.controlador.ControladorTexto;
+import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
+import javax.swing.JFileChooser;
+import javax.swing.filechooser.FileNameExtensionFilter;
 
-    /**
+/**
+     * Esta clase es específicamente la interfaz gráfica de la aplicación, es decir 
+     * con la que el usuario interactuará de manera directa. En esta clase el usuario podrá
+     * escoger la ruta para la ejecución del programa. Sin embargo, el usuario deberá tener en
+     * en cuenta las restricciones planteadas.
      * Creates new form VentanaPrincipal
      */
+
+public class VentanaPrincipal extends javax.swing.JFrame {
+    private ControladorTexto controladorTexto;
+    
     public VentanaPrincipal() {
         initComponents();
+        controladorTexto = new ControladorTexto();
     }
 
     /**
@@ -45,14 +55,29 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         txtRuta.setEditable(false);
 
         btnEscoger.setText("Escoger");
+        btnEscoger.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnEscogerActionPerformed(evt);
+            }
+        });
 
         texto.setColumns(20);
         texto.setRows(5);
         jScrollPane1.setViewportView(texto);
 
         btnBuscar.setText("Buscar");
+        btnBuscar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnBuscarActionPerformed(evt);
+            }
+        });
 
         btnLimpiar.setText("Limpiar");
+        btnLimpiar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnLimpiarActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -112,6 +137,45 @@ public class VentanaPrincipal extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void btnEscogerActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEscogerActionPerformed
+        JFileChooser buscador = new JFileChooser();
+        
+        FileNameExtensionFilter filtro = new FileNameExtensionFilter("*.TXT", "txt" );
+        
+        buscador.setFileFilter(filtro);
+        
+        buscador.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
+        
+        int seleccionar = buscador.showOpenDialog(this);
+
+        if (seleccionar == JFileChooser.APPROVE_OPTION) {
+
+            File fichero = buscador.getSelectedFile();
+            txtRuta.setText(fichero.getAbsolutePath());  
+            try(FileReader fr=new FileReader(fichero)){
+                String cadena="";
+                int valor=fr.read();
+                while (valor!=-1) {                    
+                    cadena=cadena+(char)valor;
+                    valor=fr.read();
+                }
+                this.texto.setText(cadena);
+           
+            }catch(IOException e){
+            e.printStackTrace();
+            }
+        }
+    }//GEN-LAST:event_btnEscogerActionPerformed
+
+    private void btnBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarActionPerformed
+        texto.setText(controladorTexto.desencriptar(texto.getText()));
+    }//GEN-LAST:event_btnBuscarActionPerformed
+
+    private void btnLimpiarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLimpiarActionPerformed
+        texto.setText("");
+        txtRuta.setText("");
+    }//GEN-LAST:event_btnLimpiarActionPerformed
 
     /**
      * @param args the command line arguments
