@@ -65,7 +65,7 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         texto.setRows(5);
         jScrollPane1.setViewportView(texto);
 
-        btnBuscar.setText("Buscar");
+        btnBuscar.setText("Desencriptar");
         btnBuscar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnBuscarActionPerformed(evt);
